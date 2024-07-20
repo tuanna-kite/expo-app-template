@@ -1,6 +1,8 @@
 import { SplashScreen, Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
 import { useEffect } from 'react'
+import { Provider } from 'react-redux'
+import store from '@/redux'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -25,9 +27,9 @@ const RootLayout = () => {
   if (!fontsLoaded) return null
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" />
-    </Stack>
+    <Provider store={store}>
+      <Stack screenOptions={{ headerShown: false }}></Stack>
+    </Provider>
   )
 }
 
