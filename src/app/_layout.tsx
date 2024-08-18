@@ -1,12 +1,18 @@
 import { SplashScreen, Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Provider } from 'react-redux'
 import store from '@/redux'
+import { useSetupTrackPlayer } from '@/hooks/useSetupTrackPlayer'
+import TrackPlayer from 'react-native-track-player'
+import { playbackService } from '@/constants/playbackService'
+import { useLogTrackPlayerState } from '@/hooks/useLogTrackPlayerState'
 
 SplashScreen.preventAutoHideAsync()
+TrackPlayer.registerPlaybackService(() => playbackService)
 
 const RootLayout = () => {
+  const [playerLoaded, setPlayerLoaded] = useState(false)
   const [fontsLoaded, error] = useFonts({
     'Poppins-Black': require('@/assets/fonts/Poppins-Black.ttf'),
     'Poppins-Bold': require('@/assets/fonts/Poppins-Bold.ttf'),
@@ -19,12 +25,22 @@ const RootLayout = () => {
     'Poppins-Thin': require('@/assets/fonts/Poppins-Thin.ttf'),
   })
 
+  const handleTrackPlayerLoaded = useCallback(() => {
+    setPlayerLoaded(true)
+  }, [])
+
+  useSetupTrackPlayer({
+    onLoad: handleTrackPlayerLoaded,
+  })
+
   useEffect(() => {
     if (error) throw error
-    if (fontsLoaded) SplashScreen.hideAsync()
-  }, [fontsLoaded, error])
+    if (fontsLoaded && playerLoaded) SplashScreen.hideAsync()
+  }, [fontsLoaded, error, playerLoaded])
 
-  if (!fontsLoaded) return null
+  useLogTrackPlayerState()
+
+  if (!fontsLoaded || !playerLoaded) return null
 
   return (
     <Provider store={store}>

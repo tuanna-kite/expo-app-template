@@ -1,15 +1,18 @@
 import CustomButton from '@/components/CustomButton'
+import PlayAudioTest from '@/components/PlayAudioTest'
 import { images } from '@/constants'
 import { ERouteTable } from '@/constants/route-table'
 import { router } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import { Image, ScrollView, Text, View } from 'react-native'
+import { Button, Image, ScrollView, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import TrackPlayer, { Track, useIsPlaying } from 'react-native-track-player'
 
 export default function App() {
   return (
     <>
       <SafeAreaView className="bg-primary h-full">
+        <PlayAudioTest />
         <ScrollView contentContainerStyle={{ height: '100%' }}>
           <View className="w-full h-full items-center px-4">
             <Image source={images.logo} className="w-[130px] h-[84px]" resizeMode="contain" />
